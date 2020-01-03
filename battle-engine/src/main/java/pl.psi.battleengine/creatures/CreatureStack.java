@@ -14,6 +14,7 @@ public class CreatureStack implements GuiTileIf {
     private final CreatureStatistic statistic;
     private DealDamageStrategyIf dealDamageStrategy;
 
+
     @Builder
     public CreatureStack(String aName, int aMaxHp, Range<Integer> aAttack, int aDefence, int aMoveRange) {
         statistic = CreatureStatistic.builder().aName(aName).aMaxHp(aMaxHp).aAttack(aAttack).aDefence(aDefence).aMoveRange(aMoveRange).build();
