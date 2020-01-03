@@ -4,6 +4,7 @@ import com.google.common.collect.Range;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import pl.psi.battleengine.creatures.CreatureStack;
+import pl.psi.battleengine.spellbook.BuffAttackSpell;
 
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -29,7 +30,7 @@ class SpellBookTest {
         // before buff
         assertEquals(2, imp.getAttack().lowerEndpoint());
         // after buff
-        //BUFF
-        assertEquals(3, imp.getAttack().lowerEndpoint());
+        imp.addSpell(new BuffAttackSpell());
+        assertEquals(4, imp.getAttack().lowerEndpoint());
     }
 }

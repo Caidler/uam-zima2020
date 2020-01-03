@@ -2,10 +2,11 @@ package pl.psi.battleengine.spellbook;
 
 import java.awt.*;
 
-interface SpellIf {
+public interface SpellIf {
 
-    public void turn();
+    public int howManyTurns();
     public String name();
     public Point point();
-    public String creatureName();
+
 }
+

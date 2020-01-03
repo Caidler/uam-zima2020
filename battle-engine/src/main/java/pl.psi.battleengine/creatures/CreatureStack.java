@@ -4,6 +4,11 @@ import com.google.common.collect.Range;
 import lombok.Builder;
 import pl.psi.CreatureStatistic;
 import pl.psi.battleengine.move.GuiTileIf;
+import pl.psi.battleengine.spellbook.AttackBuffIf;
+import pl.psi.battleengine.spellbook.SpellIf;
+
+import java.util.LinkedList;
+import java.util.List;
 
 public class CreatureStack implements GuiTileIf {
 
@@ -13,6 +18,7 @@ public class CreatureStack implements GuiTileIf {
     private int amount;
     private final CreatureStatistic statistic;
     private DealDamageStrategyIf dealDamageStrategy;
+    private List<AttackBuffIf> attackSpells;
 
 
     @Builder
@@ -20,11 +26,17 @@ public class CreatureStack implements GuiTileIf {
         statistic = CreatureStatistic.builder().aName(aName).aMaxHp(aMaxHp).aAttack(aAttack).aDefence(aDefence).aMoveRange(aMoveRange).build();
         currentHp = statistic.getMaxHp();
         dealDamageStrategy = new DefaultDamageStrategy();
+        attackSpells = new LinkedList<AttackBuffIf>();
     }
 
     public CreatureStack(CreatureStatistic aStatistic, Integer aAmount) {
         amount = aAmount;
         statistic = aStatistic;
+        attackSpells = new LinkedList<AttackBuffIf>();
+    }
+
+    public void addSpell(AttackBuffIf aBuff){
+        attackSpells.add(aBuff);
     }
 
     void attack(CreatureStack aDefender) {
@@ -65,7 +77,21 @@ public class CreatureStack implements GuiTileIf {
     }
 
     public Range<Integer> getAttack() {
-        return getStatistic().getAttack();
+
+        int base_lower_attack = getStatistic().getAttack().lowerEndpoint();
+        int base_upper_attack = getStatistic().getAttack().upperEndpoint();
+        int attack_low = base_lower_attack;
+        int attack_up = base_upper_attack;
+
+        for(AttackBuffIf buff : attackSpells){
+
+            attack_low += buff.getBuff(base_lower_attack);
+            attack_up += buff.getBuff(base_upper_attack);
+
+        }
+
+        return Range.closed(attack_low, attack_up);
+
     }
 
     public String getName() {
