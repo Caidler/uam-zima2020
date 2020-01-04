@@ -9,6 +9,7 @@ import pl.psi.battleengine.spellbook.SpellIf;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Vector;
 
 public class CreatureStack implements GuiTileIf {
 
@@ -19,6 +20,7 @@ public class CreatureStack implements GuiTileIf {
     private final CreatureStatistic statistic;
     private DealDamageStrategyIf dealDamageStrategy;
     private List<AttackBuffIf> attackSpells;
+    private List<SpellIf> spells;
 
 
     @Builder
@@ -26,7 +28,8 @@ public class CreatureStack implements GuiTileIf {
         statistic = CreatureStatistic.builder().aName(aName).aMaxHp(aMaxHp).aAttack(aAttack).aDefence(aDefence).aMoveRange(aMoveRange).build();
         currentHp = statistic.getMaxHp();
         dealDamageStrategy = new DefaultDamageStrategy();
-        attackSpells = new LinkedList<AttackBuffIf>();
+        attackSpells = new Vector<AttackBuffIf>();
+        spells = new Vector<SpellIf>();
     }
 
     public CreatureStack(CreatureStatistic aStatistic, Integer aAmount) {
@@ -37,6 +40,7 @@ public class CreatureStack implements GuiTileIf {
 
     public void addSpell(AttackBuffIf aBuff){
         attackSpells.add(aBuff);
+        spells.add(aBuff);
     }
 
     void attack(CreatureStack aDefender) {
